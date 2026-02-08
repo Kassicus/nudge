@@ -7,12 +7,18 @@
 
 import SwiftUI
 import SwiftData
+import FoundationModels
 
 @main
 struct NudgeApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            UserProfile.self,
+            Habit.self,
+            CheckIn.self,
+            Conversation.self,
+            Message.self,
+            PreGeneratedMessage.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
