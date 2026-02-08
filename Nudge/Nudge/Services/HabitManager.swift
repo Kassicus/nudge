@@ -96,9 +96,10 @@ class HabitManager {
         return count > 0
     }
 
-    // MARK: - Test Data Seeding
+    // MARK: - Debug Data Seeding
 
-    func seedTestHabitIfNeeded() -> Habit? {
+    #if DEBUG
+    func seedDebugHabitIfNeeded() -> Habit? {
         guard !hasAnyHabits() else { return nil }
 
         let habit = createHabit(
@@ -111,14 +112,13 @@ class HabitManager {
             reminderMinute: 0
         )
 
-        #if DEBUG
         habit.currentStreak = 5
         habit.longestStreak = 5
         habit.lastCompletedDate = Calendar.current.startOfDay(for: Date())
         habit.lastCheckInDate = Calendar.current.startOfDay(for: Date())
         try? modelContext.save()
-        #endif
 
         return habit
     }
+    #endif
 }

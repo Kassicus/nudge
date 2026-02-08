@@ -11,6 +11,33 @@ enum BuddyPersonality: String, Codable, CaseIterable {
     case chillCompanion
     case hypePartner
 
+    var displayName: String {
+        switch self {
+        case .supportiveFriend: return "Supportive Friend"
+        case .toughCoach:       return "Tough Coach"
+        case .chillCompanion:   return "Chill Companion"
+        case .hypePartner:      return "Hype Partner"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .supportiveFriend: return "🤗"
+        case .toughCoach:       return "💪"
+        case .chillCompanion:   return "😌"
+        case .hypePartner:      return "🔥"
+        }
+    }
+
+    var tagline: String {
+        switch self {
+        case .supportiveFriend: return "Warm, patient, celebrates small wins"
+        case .toughCoach:       return "Direct, expects results, fair"
+        case .chillCompanion:   return "Relaxed, no pressure, laid back"
+        case .hypePartner:      return "High energy, enthusiastic, emoji-heavy"
+        }
+    }
+
     var systemDescription: String {
         switch self {
         case .supportiveFriend:
