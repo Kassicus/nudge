@@ -8,6 +8,7 @@ import SwiftUI
 struct BuddyAvatar: View {
     let name: String
     var size: CGFloat = 32
+    var emotion: BuddyEmotion? = nil
 
     var body: some View {
         ZStack {
@@ -18,6 +19,13 @@ struct BuddyAvatar: View {
             Text(initials)
                 .font(.system(size: size * 0.4, weight: .semibold))
                 .foregroundStyle(.white)
+        }
+        .overlay {
+            if let ringColor = emotionRingColor {
+                Circle()
+                    .strokeBorder(ringColor, lineWidth: size * 0.07)
+                    .frame(width: size + size * 0.15, height: size + size * 0.15)
+            }
         }
     }
 
@@ -34,12 +42,26 @@ struct BuddyAvatar: View {
         let colors: [Color] = [.blue, .purple, .orange, .green, .pink, .teal]
         return colors[hash % colors.count]
     }
+
+    private var emotionRingColor: Color? {
+        guard let emotion else { return nil }
+        switch emotion {
+        case .neutral:     return nil
+        case .proud:       return .blue
+        case .excited:     return .purple
+        case .celebratory: return .yellow
+        case .supportive:  return .green
+        case .concerned:   return .orange
+        case .welcomeBack: return .teal
+        }
+    }
 }
 
 #Preview {
-    HStack {
-        BuddyAvatar(name: "Alex")
-        BuddyAvatar(name: "Coach Mike", size: 44)
-        BuddyAvatar(name: "Zen", size: 24)
+    HStack(spacing: 20) {
+        BuddyAvatar(name: "Alex", emotion: .proud)
+        BuddyAvatar(name: "Coach Mike", size: 44, emotion: .celebratory)
+        BuddyAvatar(name: "Zen", size: 24, emotion: .concerned)
+        BuddyAvatar(name: "Sam", size: 32)
     }
 }

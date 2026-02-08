@@ -19,6 +19,8 @@ struct ContentView: View {
                 hasSeeded = true
 
                 let manager = HabitManager(modelContext: modelContext)
+                manager.reconcileMissedCheckIns()
+
                 if let habit = manager.seedTestHabitIfNeeded() {
                     let engine = ConversationEngine(modelContext: modelContext)
                     let _ = await engine.startCheckIn(for: habit)

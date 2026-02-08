@@ -44,6 +44,19 @@ struct ConversationsListView: View {
                 }
             }
             .navigationTitle("Nudge")
+            #if DEBUG
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if let habit = habits.first {
+                        NavigationLink {
+                            DebugStreakView(habit: habit)
+                        } label: {
+                            Image(systemName: "ant")
+                        }
+                    }
+                }
+            }
+            #endif
         }
     }
 

@@ -57,6 +57,8 @@ struct TemplateFallbacks {
         "missed": [
             "neutral": ["No worries — tomorrow's a new day.", "That's okay! One day doesn't define the journey."],
             "proud": ["Streak paused, but all that progress isn't gone. Tomorrow! 💪"],
+            "excited": ["Hey, even record-breakers take a rest day. You'll get back to it! 💪"],
+            "celebratory": ["The streak pauses but wow, what a run! {streak} days is still amazing 🎉"],
             "supportive": ["Hey, it happens. Don't be hard on yourself. Tomorrow's there for you."],
             "concerned": ["I hear you. Is there something making it harder lately? I'm here if you want to talk about it."],
             "welcomeBack": ["No stress at all. The fact that you're here means a lot. One step at a time."]
@@ -64,16 +66,29 @@ struct TemplateFallbacks {
         "partial": [
             "neutral": ["Partial counts! Some is better than none.", "Hey, you still showed up. That matters."],
             "proud": ["Still showed up, that's what counts! Almost there 💪"],
+            "excited": ["Even a partial day keeps momentum going! Still at {streak} days 🔥"],
+            "celebratory": ["Partial on a milestone streak? Still incredible. Keep it rolling! 🎉"],
             "supportive": ["Showing up partially is still showing up. Proud of you!"],
-            "concerned": ["Every little bit helps. Glad you did something today."]
+            "concerned": ["Every little bit helps. Glad you did something today."],
+            "welcomeBack": ["You showed up and did some — that's huge after a break! 💪"]
         ],
         "skipped": [
             "neutral": ["Totally fair. Rest when you need to. We'll pick back up tomorrow.", "Got it — take care of yourself first. See you tomorrow! ❤️"],
+            "excited": ["Rest days are part of the journey. {streak} days is still amazing!"],
+            "proud": ["Smart call if you need rest. Your {streak}-day streak shows real commitment."],
+            "celebratory": ["Even champions rest! Your {streak}-day run speaks for itself 🎉"],
             "supportive": ["Self-care comes first. See you when you're ready!"],
-            "concerned": ["Take all the time you need. I'll be here when you're ready."]
+            "concerned": ["Take all the time you need. I'll be here when you're ready."],
+            "welcomeBack": ["Totally okay. No rush — just glad you checked in. 😊"]
         ],
         "unclear": [
-            "neutral": ["Hmm, I'm not quite sure — did you get to it today?", "So... did you do it? 😄"]
+            "neutral": ["Hmm, I'm not quite sure — did you get to it today?", "So... did you do it? 😄"],
+            "proud": ["Ha — not sure I caught that! Did you keep the {streak}-day streak alive? 💪"],
+            "excited": ["Wait, I need to know — did you break your record today?! 🔥"],
+            "celebratory": ["Hold on — did you hit the milestone or not?! The suspense! 🎉"],
+            "supportive": ["I didn't quite catch that — how did it go today?"],
+            "concerned": ["Not sure I followed — no pressure, just want to know how you're doing."],
+            "welcomeBack": ["I'm just glad you're here! So… did you get to {habit}? 😊"]
         ]
     ]
 
@@ -99,6 +114,11 @@ struct TemplateFallbacks {
         }
 
         return "Got it! Thanks for checking in 😊"
+    }
+
+    static func getTemplateFallback(status: CheckInStatus, emotion: String, habit: Habit) -> String {
+        let template = getTemplateFallback(status: status, emotion: emotion)
+        return fillPlaceholders(template, habit: habit)
     }
 
     // MARK: - Placeholder Filling

@@ -14,6 +14,10 @@ struct ChatView: View {
     @State private var inputText = ""
     @FocusState private var isInputFocused: Bool
 
+    private var emotion: BuddyEmotion? {
+        BuddyEmotion(rawValue: conversation.emotionalState)
+    }
+
     private var sortedMessages: [Message] {
         (conversation.messages ?? []).sorted { $0.timestamp < $1.timestamp }
     }
@@ -33,7 +37,8 @@ struct ChatView: View {
                             MessageBubble(
                                 message: message,
                                 showAvatar: showAvatar,
-                                buddyName: habit.buddyName
+                                buddyName: habit.buddyName,
+                                emotion: message.role == "buddy" ? emotion : nil
                             )
                             .id(message.id)
                         }

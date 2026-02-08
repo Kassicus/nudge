@@ -37,6 +37,8 @@ class ConversationEngine {
 
         Your current emotional state: \(emotionalState.rawValue)
 
+        You have access to the getHabitStreak tool to look up detailed streak information when needed.
+
         RULES:
         - You are texting a friend. Keep messages short and casual.
         - Never exceed 40 words per message.
@@ -47,7 +49,8 @@ class ConversationEngine {
         - If the user seems upset or stressed, acknowledge it before asking about the habit.
         """
 
-        return LanguageModelSession(instructions: instructions)
+        let tools: [any Tool] = [HabitStreakTool(habit: habit)]
+        return LanguageModelSession(tools: tools, instructions: instructions)
     }
 
     // MARK: - Start Check-In
@@ -115,7 +118,8 @@ class ConversationEngine {
             } else {
                 buddyText = TemplateFallbacks.getTemplateFallback(
                     status: result.status,
-                    emotion: conversation.emotionalState
+                    emotion: conversation.emotionalState,
+                    habit: habit
                 )
             }
 
@@ -142,7 +146,8 @@ class ConversationEngine {
             // LLM failed — use template fallback
             let fallbackText = TemplateFallbacks.getTemplateFallback(
                 status: .completed,
-                emotion: conversation.emotionalState
+                emotion: conversation.emotionalState,
+                habit: habit
             )
             let fallback = Message(content: fallbackText, role: "buddy")
             fallback.conversation = conversation

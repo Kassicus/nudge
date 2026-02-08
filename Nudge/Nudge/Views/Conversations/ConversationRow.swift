@@ -14,9 +14,14 @@ struct ConversationRow: View {
         return messages.max(by: { $0.timestamp < $1.timestamp })
     }
 
+    private var emotion: BuddyEmotion? {
+        guard let state = conversation?.emotionalState else { return nil }
+        return BuddyEmotion(rawValue: state)
+    }
+
     var body: some View {
         HStack(spacing: 12) {
-            BuddyAvatar(name: habit.buddyName, size: 48)
+            BuddyAvatar(name: habit.buddyName, size: 48, emotion: emotion)
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack {

@@ -44,6 +44,42 @@ class HabitManager {
         try? modelContext.save()
     }
 
+    // MARK: - Missed Day Reconciliation
+
+    func reconcileMissedCheckIns() {
+        let habits = fetchAllHabits()
+        let calendar = Calendar.current
+        let yesterday = calendar.startOfDay(for: calendar.date(byAdding: .day, value: -1, to: Date())!)
+
+        for habit in habits {
+            guard let lastCheckIn = habit.lastCheckInDate else { continue }
+            let startDate = calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: lastCheckIn)!)
+
+            guard startDate <= yesterday else { continue }
+
+            var current = startDate
+            var missedAny = false
+
+            while current <= yesterday {
+                if HabitScheduleHelpers.isDue(habit, on: current) {
+                    let checkIn = CheckIn(date: current, status: "missed")
+                    checkIn.habit = habit
+                    modelContext.insert(checkIn)
+                    missedAny = true
+                    habit.consecutiveMisses += 1
+                }
+                current = calendar.date(byAdding: .day, value: 1, to: current)!
+            }
+
+            if missedAny {
+                habit.currentStreak = 0
+                habit.lastCheckInDate = yesterday
+            }
+        }
+
+        try? modelContext.save()
+    }
+
     // MARK: - Queries
 
     func fetchAllHabits() -> [Habit] {
@@ -74,6 +110,14 @@ class HabitManager {
             reminderHour: 20,
             reminderMinute: 0
         )
+
+        #if DEBUG
+        habit.currentStreak = 5
+        habit.longestStreak = 5
+        habit.lastCompletedDate = Calendar.current.startOfDay(for: Date())
+        habit.lastCheckInDate = Calendar.current.startOfDay(for: Date())
+        try? modelContext.save()
+        #endif
 
         return habit
     }
